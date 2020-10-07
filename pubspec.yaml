@@ -2,6 +2,9 @@ name: pausable_timer
 description: A timer that can be paused, resumed and reset.
 version: 0.1.0
 
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
 dependencies:
   clock: '^1.0.1'
 
