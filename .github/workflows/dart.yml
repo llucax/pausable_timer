@@ -23,7 +23,8 @@ jobs:
       run: dart analyze
 
     - name: Check format
-      run: dart format --summary none --set-exit-if-changed -o none lib test
+      run: dart format --summary none --set-exit-if-changed -o none
+        lib test example
 
     - name: Run tests
       run: dart test --coverage=./coverage
