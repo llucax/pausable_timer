@@ -1,5 +1,7 @@
 # pausable\_timer
 
+[![Coverage]](https://codecov.io/gh/llucax/pausable_timer)
+
 A [Dart](https://dart.dev/)
 [timer](https://api.dart.dev/stable/dart-async/Timer/Timer.html) that can be
 paused, resumed and reset.
@@ -67,3 +69,5 @@ be pushed, and one hook to run `flutter analyze` and `flutter test` before
 a new commit is created. The later can take some time, but it can be easily
 disabled temporarily by using `git commit --no-verify` if you are, for example,
 just changing the README file or amending a commit message.
+
+[Coverage]: (https://codecov.io/gh/llucax/pausable_timer/branch/main/graph/badge.svg)
