@@ -1,4 +1,4 @@
-name: Dart CI
+name: CI
 
 on:
   push:
@@ -7,8 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
 
     container:
@@ -16,11 +15,28 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Install dependencies
       run: dart pub get
+
     - name: Analyze
       run: dart analyze
+
     - name: Check format
       run: dart format --summary none --set-exit-if-changed -o none lib test
+
     - name: Run tests
-      run: dart test
+      run: dart test --coverage=./coverage
+
+    - name: Convert coverage to LCOV
+      run: dart pub run coverage:format_coverage --lcov --packages=.packages 
+        --report-on=lib -i coverage -o coverage/lcov.info
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: coverage/lcov.info
+        flags: unit
+
+# vim: set et sw=2 sts=2 :
