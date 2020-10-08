@@ -1,0 +1,32 @@
+name: Pub Score
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  pub-score:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: axel-op/dart-package-analyzer@v3
+        id: score
+        with:
+          githubToken: ${{ github.token }}
+      - name: Check score
+        env:
+          min_score: 100
+          cur_points: ${{ steps.score.outputs.total }}
+          max_points: ${{ steps.score.outputs.total_max }}
+        run: |
+          score=$(( $cur_points * 100 / $max_points ))
+          if test $score -lt $min_score
+          then
+            exec >&2
+            echo "Pub package score is too low."
+            echo "Al least $min_score is expected, but we got $score :("
+            exit 1
+          fi
+
+# vim: set et sw=2 sts=2 :
