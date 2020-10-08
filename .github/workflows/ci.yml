@@ -8,16 +8,20 @@ on:
 
 jobs:
   test:
+    strategy:
+      matrix:
+        dart_version: ["2.7", "2.8", "2.9", "2.10"]
+
     runs-on: ubuntu-latest
 
     container:
-      image:  google/dart:2.10
+      image:  google/dart:${{ matrix.dart_version }}
 
     steps:
     - uses: actions/checkout@v2
 
     - name: Install dependencies
-      run: dart pub get
+      run: pub get
 
     # Analyze step needs different config for pull_request and push, so it is
     # duplicated with if conditions to use the correct configuration for each
@@ -39,14 +43,13 @@ jobs:
         commit_sha: ${{ github.event.pull_request.head.sha }}
 
     - name: Check format
-      run: dart format --summary none --set-exit-if-changed -o none
-        lib test example
+      run: dartfmt --set-exit-if-changed --dry-run --fix lib test example
 
     - name: Run tests
-      run: dart test --coverage=./coverage
+      run: pub run test --coverage=./coverage
 
     - name: Convert coverage to LCOV
-      run: dart pub run coverage:format_coverage --lcov --packages=.packages
+      run: pub run coverage:format_coverage --lcov --packages=.packages
         --report-on=lib -i coverage -o coverage/lcov.info
 
     - name: Upload coverage to Codecov
@@ -54,6 +57,6 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         directory: coverage/lcov.info
-        flags: unit
+        flags: unit,dart${{ matrix.dart_version }}
 
 # vim: set et sw=2 sts=2 :
