@@ -1,10 +1,13 @@
+// Copyright 2020, Google LLC.
+// Copyright 2020, Leandro Lucarella.
+// SPDX-License-Identifier: BSD-3-Clause
 import 'dart:async' show Timer, Zone;
 
 import 'package:clock/clock.dart' show clock;
 
 /// A [Timer] that can be paused, resumed and reset.
 ///
-/// Based on:
+/// This implementation is roughly based on:
 /// https://github.com/dart-lang/sdk/issues/43329#issuecomment-687024252
 class PausableTimer implements Timer {
   /// The [Zone] where the [_callback] will be run.
