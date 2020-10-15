@@ -7,6 +7,10 @@
 [![popularity](https://badges.bar/pausable_timer/popularity)](https://pub.dev/packages/pausable_timer/score)
 [![likes](https://badges.bar/pausable_timer/likes)](https://pub.dev/packages/pausable_timer/score)
 
+[![Donate](https://img.shields.io/badge/Donate-Paypal-0070ba)](https://www.paypal.com/donate?hosted_button_id=UZRR3REUC4SY2)
+[![Donate](https://img.shields.io/badge/Donate-Buy%20Me%20A%20Coffee-ffdd00)](https://www.buymeacoffee.com/llucax)
+[![Donate](https://img.shields.io/badge/Donate-Flattr-6bc76b)](https://flattr.com/@llucax)
+
 A [Dart](https://dart.dev/)
 [timer](https://api.dart.dev/stable/dart-async/Timer/Timer.html) that can be
 paused, resumed and reset.
