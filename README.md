@@ -1,6 +1,6 @@
 # pausable\_timer
 
-![CI](https://github.com/llucax/pausable_timer/workflows/CI/badge.svg)
+[![CI](https://github.com/llucax/pausable_timer/workflows/CI/badge.svg)](https://github.com/llucax/pausable_timer/actions?query=branch%3Amain+workflow%3ACI+)
 [![Coverage](https://codecov.io/gh/llucax/pausable_timer/branch/main/graph/badge.svg)](https://codecov.io/gh/llucax/pausable_timer)
 [![pub package](https://img.shields.io/pub/v/pausable_timer.svg)](https://pub.dev/packages/pausable_timer)
 [![pub points](https://badges.bar/pausable_timer/pub%20points)](https://pub.dev/packages/pausable_timer/score)
