@@ -1,4 +1,4 @@
-# pausable\_timer
+# pausable\_timer [![Sponsor](https://img.shields.io/badge/-Sponsor-555555?style=flat-square)](https://github.com/llucax/llucax/blob/main/sponsoring-platforms.md)[![GitHub Sponsors](https://img.shields.io/badge/--ea4aaa?logo=github&style=flat-square)](https://github.com/sponsors/llucax)[![Liberapay](https://img.shields.io/badge/--f6c915?logo=liberapay&logoColor=black&style=flat-square)](https://liberapay.com/llucax/donate)[![Paypal](https://img.shields.io/badge/--0070ba?logo=paypal&style=flat-square)](https://www.paypal.com/donate?hosted_button_id=UZRR3REUC4SY2)[![Buy Me A Coffee](https://img.shields.io/badge/--ff813f?logo=buy-me-a-coffee&logoColor=white&style=flat-square)](https://www.buymeacoffee.com/llucax)[![Patreon](https://img.shields.io/badge/--f96854?logo=patreon&logoColor=white&style=flat-square)](https://www.patreon.com/llucax)[![Flattr](https://img.shields.io/badge/--6bc76b?logo=flattr&logoColor=white&style=flat-square)](https://flattr.com/@llucax)
 
 [![CI](https://github.com/llucax/pausable_timer/workflows/CI/badge.svg)](https://github.com/llucax/pausable_timer/actions?query=branch%3Amain+workflow%3ACI+)
 [![Pub Score](https://github.com/llucax/pausable_timer/workflows/Pub%20Score/badge.svg)](https://github.com/llucax/pausable_timer/actions?query=branch%3Amain+workflow%3A%22Pub+Score%22+)
@@ -7,10 +7,6 @@
 [![pub points](https://badges.bar/pausable_timer/pub%20points)](https://pub.dev/packages/pausable_timer/score)
 [![popularity](https://badges.bar/pausable_timer/popularity)](https://pub.dev/packages/pausable_timer/score)
 [![likes](https://badges.bar/pausable_timer/likes)](https://pub.dev/packages/pausable_timer/score)
-
-[![Donate](https://img.shields.io/badge/Donate-Paypal-0070ba)](https://www.paypal.com/donate?hosted_button_id=UZRR3REUC4SY2)
-[![Donate](https://img.shields.io/badge/Donate-Buy%20Me%20A%20Coffee-ffdd00)](https://www.buymeacoffee.com/llucax)
-[![Donate](https://img.shields.io/badge/Donate-Flattr-6bc76b)](https://flattr.com/@llucax)
 
 A [Dart](https://dart.dev/)
 [timer](https://api.dart.dev/stable/dart-async/Timer/Timer.html) that can be
