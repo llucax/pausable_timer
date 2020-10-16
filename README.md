@@ -1,6 +1,16 @@
 # pausable\_timer
 
-![CI](https://github.com/llucax/pausable_timer/workflows/CI/badge.svg) [![Coverage](https://codecov.io/gh/llucax/pausable_timer/branch/main/graph/badge.svg)](https://codecov.io/gh/llucax/pausable_timer) [![pub package](https://img.shields.io/pub/v/pausable_timer.svg)](https://pub.dev/packages/pausable_timer) [![pub points](https://badges.bar/pausable_timer/pub%20points)](https://pub.dev/packages/pausable_timer/score) [![popularity](https://badges.bar/pausable_timer/popularity)](https://pub.dev/packages/pausable_timer/score) [![likes](https://badges.bar/pausable_timer/likes)](https://pub.dev/packages/pausable_timer/score)
+[![CI](https://github.com/llucax/pausable_timer/workflows/CI/badge.svg)](https://github.com/llucax/pausable_timer/actions?query=branch%3Amain+workflow%3ACI+)
+[![Pub Score](https://github.com/llucax/pausable_timer/workflows/Pub%20Score/badge.svg)](https://github.com/llucax/pausable_timer/actions?query=branch%3Amain+workflow%3A%22Pub+Score%22+)
+[![Coverage](https://codecov.io/gh/llucax/pausable_timer/branch/main/graph/badge.svg)](https://codecov.io/gh/llucax/pausable_timer)
+[![pub package](https://img.shields.io/pub/v/pausable_timer.svg)](https://pub.dev/packages/pausable_timer)
+[![pub points](https://badges.bar/pausable_timer/pub%20points)](https://pub.dev/packages/pausable_timer/score)
+[![popularity](https://badges.bar/pausable_timer/popularity)](https://pub.dev/packages/pausable_timer/score)
+[![likes](https://badges.bar/pausable_timer/likes)](https://pub.dev/packages/pausable_timer/score)
+
+[![Donate](https://img.shields.io/badge/Donate-Paypal-0070ba)](https://www.paypal.com/donate?hosted_button_id=UZRR3REUC4SY2)
+[![Donate](https://img.shields.io/badge/Donate-Buy%20Me%20A%20Coffee-ffdd00)](https://www.buymeacoffee.com/llucax)
+[![Donate](https://img.shields.io/badge/Donate-Flattr-6bc76b)](https://flattr.com/@llucax)
 
 A [Dart](https://dart.dev/)
 [timer](https://api.dart.dev/stable/dart-async/Timer/Timer.html) that can be
