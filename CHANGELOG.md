@@ -1,4 +1,4 @@
-## dev
+## 0.1.0+2
 
 - Add example implementing a pausable countdown.
 
