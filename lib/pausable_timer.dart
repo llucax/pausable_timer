@@ -36,17 +36,17 @@ class PausableTimer implements Timer {
   /// This allows us to pause the timer and resume from where it left of.
   ///
   /// When the timer expires, this stopwatch is set to null.
-  Stopwatch _stopwatch = clock.stopwatch();
+  Stopwatch? _stopwatch = clock.stopwatch();
 
   /// The currently active [Timer].
   ///
   /// This is null whenever this timer is not currently active.
-  Timer _timer;
+  Timer? _timer;
 
   /// The callback to call when this timer expires.
   ///
   /// If this timer was [cancel]ed, then this callback is null.
-  void Function() _callback;
+  void Function()? _callback;
 
   /// The number of times this timer has expired.
   int _tick = 0;
@@ -55,14 +55,18 @@ class PausableTimer implements Timer {
   ///
   /// It also starts the [_stopwatch] and clears [_timer] and [_stopwatch] when
   /// the [_timer] expires.
+  ///
+  /// It will assert if _stopwatch is null (the timer was cancelled), so callers
+  /// should make sure the timer wasn't cancelled before calling this function.
   void _startTimer() {
-    _timer = _zone.createTimer(_originalDuration - _stopwatch.elapsed, () {
+    assert(_stopwatch != null);
+    _timer = _zone.createTimer(_originalDuration - _stopwatch!.elapsed, () {
       _tick++;
       _timer = null;
       _stopwatch = null;
-      _zone.run(_callback);
+      _zone.run(_callback!);
     });
-    _stopwatch.start();
+    _stopwatch!.start();
   }
 
   /// Creates a new timer.
@@ -73,18 +77,15 @@ class PausableTimer implements Timer {
   ///
   /// The timer [isPaused] when created, and must be [start]ed manually.
   ///
-  /// The [duration] must be non-null and equals or bigger than [Duration.zero].
+  /// The [duration] must be equals or bigger than [Duration.zero].
   /// If it is [Duration.zero], the [callback] will still not be called until
   /// the timer is [start]ed.
-  ///
-  /// [callback] must be non-null.
   PausableTimer(Duration duration, void Function() callback)
-      : assert(duration != null),
-        assert(duration >= Duration.zero),
-        assert(callback != null),
+      : assert(duration >= Duration.zero),
         _originalDuration = duration,
         _zone = Zone.current {
     _callback = _zone.bindCallback(callback);
+    assert(_callback != null);
   }
 
   /// The original duration this [Timer] was created with.
@@ -163,7 +164,7 @@ class PausableTimer implements Timer {
     if (isCancelled) return;
     _stopwatch = clock.stopwatch();
     if (isActive) {
-      _timer.cancel();
+      _timer!.cancel(); // it has to be non-null if it's active
       _startTimer();
     }
   }

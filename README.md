@@ -74,15 +74,20 @@ void main() async {
 ## Example pausable countdown implementation
 
 ```dart
+/// Example on how to implement countdown making a PausableTimer periodic.
+
 import 'package:pausable_timer/pausable_timer.dart';
 
-/// Example on how to implement countdown making a PausableTimer periodic.
 void main() async {
-  PausableTimer timer;
+  // We need to make it nullable because we have a "circular dependency" between
+  // the callback and the variable. Since we are using the same variable we are
+  // initializing, the compiler can't guarantee the callback won't be called
+  // before the PausableTimer constructor finishes.
+  PausableTimer? timerInit;
   var countDown = 5;
 
   print('Create a periodic timer that fires every 1 second and starts it');
-  timer = PausableTimer(
+  timerInit = PausableTimer(
     Duration(seconds: 1),
     () {
       countDown--;
@@ -90,7 +95,9 @@ void main() async {
       // again, but it can be reused afterwards if needed. If we cancel the
       // timer, then it can be reused after the countdown is over.
       if (countDown > 0) {
-        timer
+        // we know the callback won't be called before the constructor ends, so
+        // it is safe to use !
+        timerInit!
           ..reset()
           ..start();
       }
@@ -98,6 +105,10 @@ void main() async {
       print('\t$countDown');
     },
   )..start();
+
+  // We create a new non-nullable binding for the timer to avoid writing timer!
+  // everywhere when we *know* it will be non-null.
+  PausableTimer timer = timerInit;
 
   print('And wait 2.1 seconds...');
   print('(0.1 extra to make sure there is no race between the timer and the '

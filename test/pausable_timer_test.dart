@@ -5,7 +5,7 @@ import 'package:pausable_timer/pausable_timer.dart';
 
 void main() {
   final oneSecond = Duration(seconds: 1);
-  int numCalls;
+  var numCalls = 0;
   void callback() => numCalls++;
 
   setUp(() => numCalls = 0);
@@ -34,11 +34,8 @@ void main() {
 
   test('constructor', () {
     final throwsAssertionError = throwsA(isA<AssertionError>());
-    expect(() => PausableTimer(null, callback), throwsAssertionError);
-    expect(() => PausableTimer(oneSecond, null), throwsAssertionError);
     expect(() => PausableTimer(Duration(seconds: -1), () {}),
         throwsAssertionError);
-    expect(() => PausableTimer(null, null), throwsAssertionError);
 
     for (final duration in [Duration.zero, oneSecond]) {
       final timer = PausableTimer(duration, callback);

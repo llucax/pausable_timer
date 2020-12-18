@@ -3,16 +3,16 @@ description: A timer implementation that can be paused, resumed and reset.
 homepage: https://github.com/llucax/pausable_timer
 repository: https://github.com/llucax/pausable_timer
 
-version: 0.1.0+2
+version: 0.2.0-nullsafety.0
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0-0 <3.0.0"
 
 dependencies:
-  clock: '^1.0.1'
+  clock: '^1.1.0-nullsafety.3'
 
 dev_dependencies:
   coverage: '^0.14.1'
-  test: '^1.15.2'
-  pedantic: '^1.9.0'
-  fake_async: '^1.0.1'
+  test: '^1.16.0-nullsafety.13'
+  pedantic: '^1.10.0-nullsafety.3'
+  fake_async: '^1.2.0-nullsafety.3'
