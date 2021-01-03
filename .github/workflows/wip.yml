@@ -1,0 +1,24 @@
+name: WIP Check
+
+on: pull_request
+
+jobs:
+  # In the future the PR could be converted to a Draft PR, but for now there
+  # is no API endpoint to update a PR to make it a draft.
+  wip-check:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check if any commits start with WIP
+      run: |
+        if wips=$(curl -s -H "Accept: application/vnd.github.v3+json" \
+           https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/commits \
+            | jq -r '.[].commit.message | capture("^(?<a>.*)").a' \
+            | grep -i '^WIP')
+        then
+          if test -z "$wips"; then exit 0; fi
+          echo "$wips" | while read wip
+          do
+            echo ::error "::Found WIP commit: $wip"
+          done
+          exit 1
+        fi
