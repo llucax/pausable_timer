@@ -23,24 +23,10 @@ jobs:
     - name: Install dependencies
       run: pub get
 
-    # Analyze step needs different config for pull_request and push, so it is
-    # duplicated with if conditions to use the correct configuration for each
-    - name: Analyze (push)
-      if: ${{ github.event_name == 'push' }}
-      uses: kitek/dartanalyzer-annotations-action@v1  
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+    - name: Analyze
+      uses: zgosalvez/github-actions-analyze-flutter@v1
       with:
-        check_name: test
-        commit_sha: ${{ github.sha }}
-    - name: Analyze (pull_request)
-      if: ${{ github.event_name == 'pull_request' }}
-      uses: kitek/dartanalyzer-annotations-action@v1  
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        check_name: test
-        commit_sha: ${{ github.event.pull_request.head.sha }}
+        fail-on-warnings: true
 
     - name: Check format
       run: dartfmt --set-exit-if-changed --dry-run --fix lib test example
