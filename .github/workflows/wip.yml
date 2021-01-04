@@ -10,6 +10,13 @@ jobs:
     steps:
     - name: Check if any commits start with WIP
       run: |
+        title="${{github.event.pull_request.title}}"
+        r=0
+        if echo "$title" | grep -qi '^WIP\>'
+        then
+          echo ::error "::The PR is a Work In Progress (WIP): $title"
+          r=$(($r+1))
+        fi
         if wips=$(curl -s -H "Accept: application/vnd.github.v3+json" \
                   "${{github.event.pull_request.commits_url}}" \
             | jq -r '.[].commit.message | capture("^(?<a>.*)").a' \
@@ -19,6 +26,7 @@ jobs:
           echo "$wips" | while read wip
           do
             echo ::error "::Found WIP commit: $wip"
+            r=$(($r+1))
           done
-          exit 1
         fi
+        exit $r
