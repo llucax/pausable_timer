@@ -1,12 +1,20 @@
 name: WIP Check
 
-on: pull_request
+on:
+  pull_request:
+    # edited is to get notified about PR title changes
+    # ready_for_review to get notified when the PR changes from draft=true to
+    # draft=false
+    # The rest are the standard pull_request events to keep track to changes on
+    # commits and general PR status
+    types: [ edited, opened, ready_for_review, reopened, synchronize ]
 
 jobs:
   # In the future the PR could be converted to a Draft PR, but for now there
   # is no API endpoint to update a PR to make it a draft.
   wip-check:
     runs-on: ubuntu-latest
+    if: '!github.event.pull_request.draft'
     steps:
     - name: Check if any commits start with WIP
       run: |
