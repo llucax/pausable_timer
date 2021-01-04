@@ -28,9 +28,6 @@ jobs:
       with:
         fail-on-warnings: true
 
-    - name: Check format
-      run: dartfmt --set-exit-if-changed --dry-run --fix lib test example
-
     - name: Run tests
       run: pub run test --coverage=./coverage
 
