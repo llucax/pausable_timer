@@ -1,24 +1,40 @@
 name: WIP Check
 
-on: pull_request
+on:
+  pull_request:
+    # edited is to get notified about PR title changes
+    # ready_for_review to get notified when the PR changes from draft=true to
+    # draft=false
+    # The rest are the standard pull_request events to keep track to changes on
+    # commits and general PR status
+    types: [ edited, opened, ready_for_review, reopened, synchronize ]
 
 jobs:
   # In the future the PR could be converted to a Draft PR, but for now there
   # is no API endpoint to update a PR to make it a draft.
   wip-check:
     runs-on: ubuntu-latest
+    if: '!github.event.pull_request.draft'
     steps:
     - name: Check if any commits start with WIP
       run: |
-        if wips=$(curl -s -H "Accept: application/vnd.github.v3+json" \
-           https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/commits \
-            | jq -r '.[].commit.message | capture("^(?<a>.*)").a' \
-            | grep -i '^WIP')
+        title="${{github.event.pull_request.title}}"
+        r=0
+        if echo "$title" | grep -qi '^WIP\>'
         then
-          if test -z "$wips"; then exit 0; fi
+          echo ::error "::The PR is a Work In Progress (WIP): $title"
+          r=$(($r+1))
+        fi
+        if wips=$(curl -s -H "Accept: application/vnd.github.v3+json" \
+                  "${{github.event.pull_request.commits_url}}" \
+            | jq -r '.[].commit.message | capture("^(?<a>.*)").a' \
+            | grep -i '^WIP\>') \
+          && test -n "$wips"
+        then
           echo "$wips" | while read wip
           do
             echo ::error "::Found WIP commit: $wip"
+            r=$(($r+1))
           done
-          exit 1
         fi
+        exit $r
