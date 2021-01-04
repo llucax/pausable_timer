@@ -14,8 +14,8 @@ jobs:
            https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/commits \
             | jq -r '.[].commit.message | capture("^(?<a>.*)").a' \
             | grep -i '^WIP\>') \
+          && test -n "$wips"
         then
-          if test -z "$wips"; then exit 0; fi
           echo "$wips" | while read wip
           do
             echo ::error "::Found WIP commit: $wip"
