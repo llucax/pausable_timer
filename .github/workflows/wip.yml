@@ -20,7 +20,7 @@ jobs:
       run: |
         title="${{github.event.pull_request.title}}"
         r=0
-        if echo "$title" | grep -qi '^WIP\>'
+        if echo "$title" | grep -qiP '^WIP\b'
         then
           echo ::error "::The PR is a Work In Progress (WIP): $title"
           r=$(($r+1))
@@ -28,7 +28,7 @@ jobs:
         if wips=$(curl -s -H "Accept: application/vnd.github.v3+json" \
                   "${{github.event.pull_request.commits_url}}" \
             | jq -r '.[].commit.message | capture("^(?<a>.*)").a' \
-            | grep -i '^WIP\>') \
+            | grep -iP '^(WIP\b|(fixup|squash)!\s)') \
           && test -n "$wips"
         then
           while read wip
