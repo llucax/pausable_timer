@@ -7,6 +7,7 @@
 [![pub points](https://badges.bar/pausable_timer/pub%20points)](https://pub.dev/packages/pausable_timer/score)
 [![popularity](https://badges.bar/pausable_timer/popularity)](https://pub.dev/packages/pausable_timer/score)
 [![likes](https://badges.bar/pausable_timer/likes)](https://pub.dev/packages/pausable_timer/score)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fllucax%2Fpausable_timer.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fllucax%2Fpausable_timer?ref=badge_shield)
 
 A [Dart](https://dart.dev/)
 [timer](https://api.dart.dev/stable/dart-async/Timer/Timer.html) that can be
@@ -145,3 +146,7 @@ void main() async {
   print('And it should be done printing: 2, 1 and 0');
 }
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fllucax%2Fpausable_timer.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fllucax%2Fpausable_timer?ref=badge_large)
