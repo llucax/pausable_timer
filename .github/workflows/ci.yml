@@ -19,6 +19,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 2 # needed by codecov
 
     - name: Install dependencies
       run: pub get
