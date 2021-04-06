@@ -1,3 +1,11 @@
+## 0.2.0
+
+- Bump dependencies.
+
+**NOTE:** Unless critical issues are found, this release will be released as
+1.0.0 with no other changes since it has been pretty stable for a while now,
+and no API breaking changes are expected for a long while either.
+
 ## 0.2.0-nullsafety.0
 
 - Make package [null-safe](https://dart.dev/null-safety).

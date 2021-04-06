@@ -10,7 +10,7 @@ jobs:
   test:
     strategy:
       matrix:
-        dart_version: ["2.12-beta"]
+        dart_version: ["2.12"]
 
     runs-on: ubuntu-latest
 
@@ -19,6 +19,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 2 # needed by codecov
 
     - name: Install dependencies
       run: pub get
