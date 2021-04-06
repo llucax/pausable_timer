@@ -3,10 +3,10 @@ description: A timer implementation that can be paused, resumed and reset.
 homepage: https://github.com/llucax/pausable_timer
 repository: https://github.com/llucax/pausable_timer
 
-version: 0.2.0
+version: 0.2.0+1
 
 environment:
-  sdk: ">=2.12.0-0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   clock: ^1.1.0
