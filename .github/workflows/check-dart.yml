@@ -1,4 +1,4 @@
-name: Check Dart latest version
+name: Latest Dart Version
 
 on:
   schedule:
@@ -12,6 +12,7 @@ env:
 
 jobs:
   check-dart-version:
+    name: Check
     runs-on: ubuntu-latest
 
     steps:
