@@ -1,3 +1,15 @@
+## 1.0.0+1
+
+This is a symbolic release marking that this package is stable (it has
+been used for some time now without further issues) and there is no plan
+to change the API in a near future.
+
+The code is exacly the same as in version v0.2.0+1.
+
+## 1.0.0
+
+Unpublished version due to errors in the release process.
+
 ## 0.2.0+1
 
 - Fix minimum dart SDK version (use a final release, not a pre-release).
