@@ -8,7 +8,7 @@ env:
   # Current supported major
   major: 2
   # Latest minor that we are explicitly supporting
-  latest_minor: 12
+  latest_minor: 13
 
 jobs:
   check-dart-version:
