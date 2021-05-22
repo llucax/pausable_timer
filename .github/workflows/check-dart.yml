@@ -22,13 +22,13 @@ jobs:
     - name: Check latest version ${{ env.major }} docker image
       run: |
         digest() {
-          curl -s -H "Content-Type: application/json" "https://hub.docker.com/v2/repositories/google/dart/tags/$1" |
+          curl -s -H "Content-Type: application/json" "https://hub.docker.com/v2/repositories/_/dart/tags/$1" |
             jq .images[0].digest
         }
-        if test "$(digest $major)" != "$(digest $major.$latest_minor)"
+        if test "$(digest stable)" != "$(digest $major.$latest_minor)"
         then
-          echo "Version of $major.$latest_minor is not the latest version" \
-            "$major for https://hub.docker.com/r/google/dart" >&2
+          echo "Version of $major.$latest_minor is not the latest stable" \
+            "version for https://hub.docker.com/r/_/dart" >&2
             exit 1
         fi
 
