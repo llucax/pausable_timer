@@ -1,6 +1,7 @@
 name: Latest Dart Version
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 6 * * 5' # Run at 6:00 on Friday
 
