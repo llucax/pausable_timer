@@ -25,7 +25,15 @@ jobs:
           curl -s -H "Content-Type: application/json" "https://hub.docker.com/v2/repositories/_/dart/tags/$1" |
             jq .images[0].digest
         }
-        if test "$(digest stable)" != "$(digest $major.$latest_minor)"
+        digest_stable=$(digest stable)
+        digest_current=$(digest $major.$latest_minor)
+        if test "$digest_stable" = null -o "$digest_current" = null
+        then
+          echo "Could not get the stable image digest ($digest_stable) or the currrent ($major.$latest_minor)" \
+            "image digest ($digest_current)." >&2
+            exit 1
+        fi
+        if test "$digest_stable" != "$digest_current"
         then
           echo "Version of $major.$latest_minor is not the latest stable" \
             "version for https://hub.docker.com/r/_/dart" >&2
