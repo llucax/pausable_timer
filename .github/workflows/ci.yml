@@ -13,7 +13,7 @@ jobs:
   test:
     strategy:
       matrix:
-        dart_version: ["2.13", "2.12"]
+        dart_version: ["2.14", "2.13", "2.12"]
 
     runs-on: ubuntu-latest
 
