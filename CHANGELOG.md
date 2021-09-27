@@ -1,3 +1,12 @@
+## 1.0.0+2
+
+- Improve CI of the project
+- Update example to use `late` instead of an extra variable to avoid `!`.
+- Update and test against Dart 2.14.
+
+[More details available in
+GitHub](https://github.com/llucax/pausable_timer/milestone/7?closed=1).
+
 ## 1.0.0+1
 
 This is a symbolic release marking that this package is stable (it has
