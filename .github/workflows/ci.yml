@@ -11,7 +11,7 @@ on:
 
 jobs:
   test:
-    if: ${{ github.event_name != "release" || github.event.action != "published" }}
+    if: ${{ github.event_name != 'release' || github.event.action != 'published' }}
 
     strategy:
       matrix:
