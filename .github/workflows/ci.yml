@@ -33,9 +33,7 @@ jobs:
       run: $(command -v pub || echo dart pub) get
 
     - name: Analyze
-      uses: zgosalvez/github-actions-analyze-flutter@v1
-      with:
-        fail-on-warnings: true
+      run: dart analyze --fatal-infos
 
     - name: Run tests
       run: $(command -v pub || echo dart pub) run test --coverage=./coverage
