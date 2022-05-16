@@ -1,3 +1,10 @@
+## 1.0.0+5
+
+- Update and test against Dart 2.17.
+
+[More details available in
+GitHub](https://github.com/llucax/pausable_timer/milestone/9?closed=1).
+
 ## 1.0.0+4
 
 - Update and test against Dart 2.16.

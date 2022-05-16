@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        dart_version: ["2.16", "2.15", "2.14", "2.13", "2.12"]
+        dart_version: ["2.17", "2.16", "2.15", "2.14", "2.13", "2.12"]
 
     runs-on: ubuntu-latest
 
@@ -28,19 +28,20 @@ jobs:
         fetch-depth: 2 # needed by codecov
 
     - name: Install dependencies
-      run: pub get
+      # The $(command -v pub...) is a hack so the dart "prefix" is only used
+      # when the pub command is not present
+      run: $(command -v pub || echo dart pub) get
 
     - name: Analyze
-      uses: zgosalvez/github-actions-analyze-flutter@v1
-      with:
-        fail-on-warnings: true
+      run: dart analyze --fatal-infos
 
     - name: Run tests
-      run: pub run test --coverage=./coverage
+      run: $(command -v pub || echo dart pub) run test --coverage=./coverage
 
     - name: Convert coverage to LCOV
-      run: pub run coverage:format_coverage --lcov --packages=.packages
-        --report-on=lib -i coverage -o coverage/lcov.info
+      run: $(command -v pub || echo dart pub) run coverage:format_coverage
+          --lcov --packages=.dart_tool/package_config.json --report-on=lib
+          -i coverage -o coverage/lcov.info
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
