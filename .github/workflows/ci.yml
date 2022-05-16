@@ -40,8 +40,8 @@ jobs:
 
     - name: Convert coverage to LCOV
       run: $(command -v pub || echo dart pub) run coverage:format_coverage
-        --lcov --packages=.packages --report-on=lib -i coverage
-        -o coverage/lcov.info
+          --lcov --packages=.dart_tool/package_config.json --report-on=lib
+          -i coverage -o coverage/lcov.info
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
