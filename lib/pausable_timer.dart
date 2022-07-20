@@ -3,8 +3,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 import 'dart:async' show Timer, Zone;
 
-import 'package:clock/clock.dart' show clock;
-
 /// A [Timer] that can be paused, resumed and reset.
 ///
 /// This implementation is roughly based on:
@@ -36,7 +34,7 @@ class PausableTimer implements Timer {
   /// This allows us to pause the timer and resume from where it left of.
   ///
   /// When the timer expires, this stopwatch is set to null.
-  Stopwatch? _stopwatch = clock.stopwatch();
+  final Stopwatch _stopwatch = Stopwatch();
 
   /// The currently active [Timer].
   ///
@@ -59,14 +57,13 @@ class PausableTimer implements Timer {
   /// It will assert if _stopwatch is null (the timer was cancelled), so callers
   /// should make sure the timer wasn't cancelled before calling this function.
   void _startTimer() {
-    assert(_stopwatch != null);
-    _timer = _zone.createTimer(_originalDuration - _stopwatch!.elapsed, () {
+    _timer = _zone.createTimer(_originalDuration - _stopwatch.elapsed, () {
       _tick++;
       _timer = null;
-      _stopwatch = null;
+      _stopwatch.reset();
       _zone.run(_callback!);
     });
-    _stopwatch!.start();
+    _stopwatch.start();
   }
 
   /// Creates a new timer.
@@ -96,7 +93,7 @@ class PausableTimer implements Timer {
   ///
   /// If the timer is paused, the elapsed time is also not computed anymore, so
   /// [elapsed] is always less than or equals to the [duration].
-  Duration get elapsed => _stopwatch?.elapsed ?? _originalDuration;
+  Duration get elapsed => _stopwatch.elapsed;
 
   /// True if this [Timer] is armed but not currently active.
   ///
@@ -125,7 +122,9 @@ class PausableTimer implements Timer {
   /// a [Timer] is also allowed, and will have no further effect.
   @override
   void cancel() {
-    _stopwatch?.stop();
+    _stopwatch
+      ..stop()
+      ..reset();
     _timer?.cancel();
     _timer = null;
     _callback = null;
@@ -149,7 +148,7 @@ class PausableTimer implements Timer {
   ///
   /// Nothing happens if the timer [isPaused], [isExpired] or [isCancelled].
   void pause() {
-    _stopwatch?.stop();
+    _stopwatch.stop();
     _timer?.cancel();
     _timer = null;
   }
@@ -162,7 +161,7 @@ class PausableTimer implements Timer {
   /// Does not change whether the timer [isActive] or [isPaused].
   void reset() {
     if (isCancelled) return;
-    _stopwatch = clock.stopwatch();
+    _stopwatch.reset();
     if (isActive) {
       _timer!.cancel(); // it has to be non-null if it's active
       _startTimer();
