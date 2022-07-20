@@ -80,11 +80,11 @@ class PausableTimer implements Timer {
   /// The [duration] must be equals or bigger than [Duration.zero].
   /// If it is [Duration.zero], the [callback] will still not be called until
   /// the timer is [start]ed.
-  PausableTimer(Duration duration, void Function() callback)
+  PausableTimer(Duration duration, void Function(PausableTimer timer) callback)
       : assert(duration >= Duration.zero),
         _originalDuration = duration,
         _zone = Zone.current {
-    _callback = _zone.bindCallback(callback);
+    _callback = _zone.bindCallback(() => callback(this));
     assert(_callback != null);
   }
 

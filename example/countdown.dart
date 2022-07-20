@@ -10,7 +10,7 @@ void main() async {
   print('Create a periodic timer that fires every 1 second and starts it');
   timer = PausableTimer(
     Duration(seconds: 1),
-    () {
+    (_) {
       countDown--;
       // If we reached 0, we don't reset and restart the time, so it won't fire
       // again, but it can be reused afterwards if needed. If we cancel the

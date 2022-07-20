@@ -2,7 +2,7 @@ import 'package:pausable_timer/pausable_timer.dart';
 
 void main() async {
   print('Create a timer that fires in 1 second, but it is not started yet');
-  final timer = PausableTimer(Duration(seconds: 1), () => print('Fired!'));
+  final timer = PausableTimer(Duration(seconds: 1), (_) => print('Fired!'));
   print('So we start it');
   timer.start();
 
