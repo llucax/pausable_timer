@@ -3,8 +3,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 import 'dart:async' show Timer, Zone;
 
-import 'package:clock/clock.dart' show clock;
-
 /// A [Timer] that can be paused, resumed and reset.
 ///
 /// This implementation is roughly based on:
@@ -36,7 +34,7 @@ class PausableTimer implements Timer {
   /// This allows us to pause the timer and resume from where it left of.
   ///
   /// When the timer expires, this stopwatch is set to null.
-  Stopwatch? _stopwatch = clock.stopwatch();
+  Stopwatch? _stopwatch = Stopwatch();
 
   /// The currently active [Timer].
   ///
@@ -162,7 +160,7 @@ class PausableTimer implements Timer {
   /// Does not change whether the timer [isActive] or [isPaused].
   void reset() {
     if (isCancelled) return;
-    _stopwatch = clock.stopwatch();
+    _stopwatch = Stopwatch();
     if (isActive) {
       _timer!.cancel(); // it has to be non-null if it's active
       _startTimer();
