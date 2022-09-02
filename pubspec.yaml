@@ -2,8 +2,10 @@ name: pausable_timer
 description: A timer implementation that can be paused, resumed and reset.
 homepage: https://github.com/llucax/pausable_timer
 repository: https://github.com/llucax/pausable_timer
+funding:
+  - https://github.com/llucax/llucax/blob/main/sponsoring-platforms.md
 
-version: 1.0.0+5
+version: 1.0.0+6
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
