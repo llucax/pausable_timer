@@ -1,3 +1,10 @@
+## 1.0.0+7
+
+- Update and test against Dart 2.19.
+
+[More details available in
+GitHub](https://github.com/llucax/pausable_timer/milestone/12?closed=1).
+
 ## 1.0.0+6
 
 - Add funding link to `pubspec.yaml`.
