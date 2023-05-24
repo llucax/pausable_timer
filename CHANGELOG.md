@@ -19,7 +19,7 @@ interested.
 [More details available in
 GitHub](https://github.com/llucax/pausable_timer/milestone/13?closed=1).
 
-## 1.0.0+8
+## 1.0.0+7
 
 - Update and test against Dart 2.19.
 
