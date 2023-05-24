@@ -1,4 +1,17 @@
-## 1.0.0+7
+## 2.0.0
+
+- Update and test against Dart 3.0.
+- Bump dependencies and configuration to work with Dart 3.0.
+- Because of the above, drop support for Dart 2.x.
+
+**NOTE:** If you need to use Dart 2.x you can stick to the 1.x branch series.
+Even more, those releases seem to be forward-compatible with Dart 3.0, so
+upgrading should only be necessary if you also need to bump other dependencies.
+
+[More details available in
+GitHub](https://github.com/llucax/pausable_timer/milestone/13?closed=1).
+
+## 1.0.0+8
 
 - Update and test against Dart 2.19.
 
