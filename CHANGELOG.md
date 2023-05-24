@@ -8,6 +8,14 @@
 Even more, those releases seem to be forward-compatible with Dart 3.0, so
 upgrading should only be necessary if you also need to bump other dependencies.
 
+**WANTED:** It's been almost 2 years since the last time I used Dart or
+Flutter, and while I enjoy maintaining open source projects, it is becoming
+more and more difficult to keep up to date with changes in Dart and maintaining
+this project, so **I'm looking for a maintainer willing to take over this
+project** to ensure its health in the future.  Please [get in
+touch](https://github.com/llucax/pausable_timer/discussions/55) if you are
+interested.
+
 [More details available in
 GitHub](https://github.com/llucax/pausable_timer/milestone/13?closed=1).
 

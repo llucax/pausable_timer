@@ -13,6 +13,16 @@ A [Dart](https://dart.dev/)
 [timer](https://api.dart.dev/stable/dart-async/Timer/Timer.html) that can be
 paused, resumed and reset.
 
+## New maintainer wanted
+
+It's been almost 2 years since the last time I used Dart or Flutter, and while
+I enjoy maintaining open source projects, it is becoming more and more
+difficult to keep up to date with changes in Dart and maintaining this project,
+so **I'm looking for a maintainer willing to take over this project** to ensure
+its health in the future.  Please [get in
+touch](https://github.com/llucax/pausable_timer/discussions/55) if you are
+interested.
+
 ## Example using `start()`, `pause()` and `reset()`
 
 ```dart
