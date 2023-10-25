@@ -1,5 +1,4 @@
-/// Example on how to implement countdown making a PausableTimer periodic.
-
+// Example on how to implement countdown making a PausableTimer periodic.
 import 'package:pausable_timer/pausable_timer.dart';
 
 void main() async {

@@ -5,23 +5,13 @@
 [![Latest Dart version](https://github.com/llucax/pausable_timer/actions/workflows/check-dart.yml/badge.svg)](https://github.com/llucax/pausable_timer/actions/workflows/check-dart.yml)
 [![Coverage](https://codecov.io/gh/llucax/pausable_timer/branch/main/graph/badge.svg)](https://codecov.io/gh/llucax/pausable_timer)
 [![pub package](https://img.shields.io/pub/v/pausable_timer.svg)](https://pub.dev/packages/pausable_timer)
-[![pub points](https://badges.bar/pausable_timer/pub%20points)](https://pub.dev/packages/pausable_timer/score)
-[![popularity](https://badges.bar/pausable_timer/popularity)](https://pub.dev/packages/pausable_timer/score)
-[![likes](https://badges.bar/pausable_timer/likes)](https://pub.dev/packages/pausable_timer/score)
+[![pub points](https://img.shields.io/pub/points/pausable_timer)](https://pub.dev/packages/pausable_timer/score)
+[![popularity](https://img.shields.io/pub/popularity/pausable_timer)](https://pub.dev/packages/pausable_timer/score)
+[![likes](https://img.shields.io/pub/likes/pausable_timer)](https://pub.dev/packages/pausable_timer/score)
 
 A [Dart](https://dart.dev/)
 [timer](https://api.dart.dev/stable/dart-async/Timer/Timer.html) that can be
 paused, resumed and reset.
-
-## New maintainer wanted
-
-It's been almost 2 years since the last time I used Dart or Flutter, and while
-I enjoy maintaining open source projects, it is becoming more and more
-difficult to keep up to date with changes in Dart and maintaining this project,
-so **I'm looking for a maintainer willing to take over this project** to ensure
-its health in the future.  Please [get in
-touch](https://github.com/llucax/pausable_timer/discussions/55) if you are
-interested.
 
 ## Example using `start()`, `pause()` and `reset()`
 

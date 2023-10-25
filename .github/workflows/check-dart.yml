@@ -45,5 +45,3 @@ jobs:
             "version for https://hub.docker.com/r/_/dart" >&2
             exit 1
         fi
-
-# vim: set et sw=2 sts=2 :

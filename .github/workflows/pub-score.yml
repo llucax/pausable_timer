@@ -28,5 +28,3 @@ jobs:
             echo "Al least $min_score is expected, but we got $score :("
             exit 1
           fi
-
-# vim: set et sw=2 sts=2 :
