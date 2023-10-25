@@ -1,0 +1,4 @@
+dartdoc:
+  linkToSource:
+    root: .
+    uriTemplate: https://github.com/llucax/pausable_timer/tree/main/%f%#L%l%

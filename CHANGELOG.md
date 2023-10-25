@@ -1,3 +1,7 @@
+## 2.0.0+2
+
+- Minor cleanups and fixes in documentations and tests
+
 ## 2.0.0+1
 
 - Update and test against Dart 3.1.

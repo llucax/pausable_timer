@@ -1,5 +1,6 @@
 // Copyright 2020, Google LLC.
 // Copyright 2020, Leandro Lucarella.
+// Copyright 2023, Mateus Felipe Cordeiro Caetano Pinto.
 // SPDX-License-Identifier: BSD-3-Clause
 import 'dart:async' show Timer, Zone;
 
@@ -7,9 +8,9 @@ import 'package:clock/clock.dart' show clock;
 
 /// A [Timer] that can be paused, resumed and reset.
 ///
-/// This implementation is roughly based on:
-/// https://github.com/dart-lang/sdk/issues/43329#issuecomment-687024252
-class PausableTimer implements Timer {
+/// This implementation is roughly based on
+/// [this comment](https://github.com/dart-lang/sdk/issues/43329#issuecomment-687024252).
+final class PausableTimer implements Timer {
   /// The [Zone] where the [_callback] will be run.
   ///
   /// Dart generally calls asynchronous callbacks in the zone where they were
@@ -20,7 +21,7 @@ class PausableTimer implements Timer {
   /// callback is created (say, remember the stack trace, which is what the
   /// stack_trace package does).
   ///
-  /// That is, we call [Zone.registeCallback] to enable zones to know about the
+  /// That is, we call [Zone.registerCallback] to enable zones to know about the
   /// callback creation as well as the later [Zone.run] for running it.
   ///
   /// If you just store the callback, but don't register it at the time it's
@@ -60,12 +61,15 @@ class PausableTimer implements Timer {
   /// should make sure the timer wasn't cancelled before calling this function.
   void _startTimer() {
     assert(_stopwatch != null);
-    _timer = _zone.createTimer(_originalDuration - _stopwatch!.elapsed, () {
-      _tick++;
-      _timer = null;
-      _stopwatch = null;
-      _zone.run(_callback!);
-    });
+    _timer = _zone.createTimer(
+      _originalDuration - _stopwatch!.elapsed,
+      () {
+        _tick++;
+        _timer = null;
+        _stopwatch = null;
+        _zone.run(_callback!);
+      },
+    );
     _stopwatch!.start();
   }
 
@@ -85,7 +89,6 @@ class PausableTimer implements Timer {
         _originalDuration = duration,
         _zone = Zone.current {
     _callback = _zone.bindCallback(callback);
-    assert(_callback != null);
   }
 
   /// The original duration this [Timer] was created with.

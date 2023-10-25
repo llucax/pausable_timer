@@ -22,3 +22,4 @@ doc/api/
 
 # Coverage reports
 coverage/
+/doc/

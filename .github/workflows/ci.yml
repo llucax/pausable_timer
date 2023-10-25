@@ -49,5 +49,3 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         directory: coverage/lcov.info
         flags: unit,dart${{ matrix.dart_version }}
-
-# vim: set et sw=2 sts=2 :
