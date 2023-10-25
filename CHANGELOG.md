@@ -1,5 +1,6 @@
-## 2.0.0+2
+## 3.0.0
 
+- **BREAKING:** `PausableTimer` is now `final`
 - Minor cleanups and fixes in documentations and tests
 
 ## 2.0.0+1
