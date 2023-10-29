@@ -1,4 +1,6 @@
 // Example on how to implement countdown making a PausableTimer periodic.
+import 'dart:async';
+
 import 'package:pausable_timer/pausable_timer.dart';
 
 void main() async {
@@ -7,21 +9,15 @@ void main() async {
   var countDown = 5;
 
   print('Create a periodic timer that fires every 1 second and starts it');
-  timer = PausableTimer(
+  timer = PausableTimer.periodic(
     Duration(seconds: 1),
     () {
       countDown--;
-      // If we reached 0, we don't reset and restart the time, so it won't fire
-      // again, but it can be reused afterwards if needed. If we cancel the
-      // timer, then it can be reused after the countdown is over.
-      if (countDown > 0) {
-        // we know the callback won't be called before the constructor ends, so
-        // it is safe to use !
-        timer
-          ..reset()
-          ..start();
+
+      if (countDown == 0) {
+        timer.pause();
       }
-      // This is really what your callback do.
+
       print('\t$countDown');
     },
   )..start();
