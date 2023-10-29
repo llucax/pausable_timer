@@ -1,3 +1,7 @@
+## 3.1.0+1
+
+- Automate pub.dev publishing with `GitHub Actions`
+
 ## 3.1.0
 
 - Provide `.periodic` constructor (#45)

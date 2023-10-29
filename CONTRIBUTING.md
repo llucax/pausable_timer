@@ -5,23 +5,23 @@
 At some point this should be automated, but for now to make a new release you
 should follow this checklist:
 
-- [ ] Update the version in `pubspec.yaml` (use X.Y.Z)
-- [ ] Add an entry to `CHANGELOG.md` (use X.Y.Z)
-- [ ] Commit and push the changes creating a PR
-- [ ] Merge the PR and pull the changes
+- [ ] Define what will be the next version of the package
+  - This package uses [semantic versioning](http://semver.org/), so take it
+    into account when releasing a new version
+- [ ] Update the version in `pubspec.yaml`
+- [ ] Add an entry to `CHANGELOG.md` describing the relevant changes
 - [ ] Run `dart pub publish -n` and make sure there are no warnings and the
   version is correct
-- [ ] Tag the release with `tag -a vX.Y.Z` and use the contents added to
+- [ ] Commit and push the changes to a new branch and open a PR
+- [ ] Merge the PR and pull the changes
+- [ ] Tag the release with `tag -a v<version>` and use the contents added to
   `CHANGELOG.md` as the message
+  - Example: for the 3.0.0 version, tag the release as `v3.0.0`
 - [ ] Push the tag
+  - Once the tag is pushed, GitHub Actions are going to automatically release
+    it to pub.dev
 - [ ] Create a GitHub release for the tag using the tag message as release
   notes
-- [ ] If there is a milestone called `vX.Y.Z`, close it. Otherwise if there is
-  a milestone `next`, rename it to `vX.Y.Z` and close it. Otherwise create
-  a new milestone and assign all the issues and PRs that were added for this
-  version
-- [ ] Create a new `next` milestone
-- [ ] Publish the package via `dart pub publish`
 
 ## Git Hooks
 
