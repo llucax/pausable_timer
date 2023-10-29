@@ -10,8 +10,6 @@ should follow this checklist:
     into account when releasing a new version
 - [ ] Update the version in `pubspec.yaml`
 - [ ] Add an entry to `CHANGELOG.md` describing the relevant changes
-- [ ] Run `dart pub publish -n` and make sure there are no warnings and the
-  version is correct
 - [ ] Commit and push the changes to a new branch and open a PR
 - [ ] Merge the PR and pull the changes
 - [ ] Tag the release with `tag -a v<version>` and use the contents added to
