@@ -120,6 +120,16 @@ final class PausableTimer implements Timer {
   ///
   /// The timer is paused when created, and must be [start]ed manually.
   ///
+  /// The exact timing depends on the underlying timer implementation.
+  /// No more than `n` callbacks will be made in `duration * n` time,
+  /// but the time between two consecutive callbacks
+  /// can be shorter and longer than `duration`.
+  ///
+  /// In particular, an implementation may schedule the next callback, e.g.,
+  /// a `duration` after either when the previous callback ended,
+  /// when the previous callback started, or when the previous callback was
+  /// scheduled for - even if the actual callback was delayed.
+  ///
   /// The [duration] must be equals or bigger than [Duration.zero].
   /// If it is [Duration.zero], the [callback] will still not be called until
   /// the timer is [start]ed.
