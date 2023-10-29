@@ -18,9 +18,9 @@ jobs:
     steps:
     - name: Check if any commits start with WIP
       run: |
-        title="${{github.event.pull_request.title}}"
+        title='${{github.event.pull_request.title}}'
         r=0
-        if echo "$title" | grep -qiP '^WIP\b'
+        if echo '$title' | grep -qiP '^WIP\b'
         then
           echo ::error "::The PR is a Work In Progress (WIP): $title"
           r=$(($r+1))

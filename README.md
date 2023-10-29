@@ -8,8 +8,8 @@
 [![pub points](https://img.shields.io/pub/points/pausable_timer)](https://pub.dev/packages/pausable_timer/score)
 [![popularity](https://img.shields.io/pub/popularity/pausable_timer)](https://pub.dev/packages/pausable_timer/score)
 [![likes](https://img.shields.io/pub/likes/pausable_timer)](https://pub.dev/packages/pausable_timer/score)
-[![Sponsor (llucax)](https://img.shields.io/badge/-Sponsor-555555?style=flat-square)](https://github.com/llucax/llucax/blob/main/sponsoring-platforms.md)[![GitHub Sponsors](https://img.shields.io/badge/--ea4aaa?logo=github&style=flat-square)](https://github.com/sponsors/llucax)[![Liberapay](https://img.shields.io/badge/--f6c915?logo=liberapay&logoColor=black&style=flat-square)](https://liberapay.com/llucax/donate)[![Paypal](https://img.shields.io/badge/--0070ba?logo=paypal&style=flat-square)](https://www.paypal.com/donate?hosted_button_id=UZRR3REUC4SY2)[![Buy Me A Coffee](https://img.shields.io/badge/--ff813f?logo=buy-me-a-coffee&logoColor=white&style=flat-square)](https://www.buymeacoffee.com/llucax)[![Patreon](https://img.shields.io/badge/--f96854?logo=patreon&logoColor=white&style=flat-square)](https://www.patreon.com/llucax)[![Flattr](https://img.shields.io/badge/--6bc76b?logo=flattr&logoColor=white&style=flat-square)](https://flattr.com/@llucax)
-[![Sponsor (mateusfccp)](https://img.shields.io/badge/-Sponsor-555555?style=flat-square)](https://github.com/sponsors/mateusfccp)[![GitHub Sponsors](https://img.shields.io/badge/--ea4aaa?logo=github&style=flat-square)](https://github.com/sponsors/mateusfccp)
+[![Sponsor (llucax)](https://img.shields.io/badge/-Sponsor%20(llucasx)-555555?style=flat-square)](https://github.com/llucax/llucax/blob/main/sponsoring-platforms.md)[![GitHub Sponsors](https://img.shields.io/badge/--ea4aaa?logo=github&style=flat-square)](https://github.com/sponsors/llucax)[![Liberapay](https://img.shields.io/badge/--f6c915?logo=liberapay&logoColor=black&style=flat-square)](https://liberapay.com/llucax/donate)[![Paypal](https://img.shields.io/badge/--0070ba?logo=paypal&style=flat-square)](https://www.paypal.com/donate?hosted_button_id=UZRR3REUC4SY2)[![Buy Me A Coffee](https://img.shields.io/badge/--ff813f?logo=buy-me-a-coffee&logoColor=white&style=flat-square)](https://www.buymeacoffee.com/llucax)[![Patreon](https://img.shields.io/badge/--f96854?logo=patreon&logoColor=white&style=flat-square)](https://www.patreon.com/llucax)[![Flattr](https://img.shields.io/badge/--6bc76b?logo=flattr&logoColor=white&style=flat-square)](https://flattr.com/@llucax)
+[![Sponsor (mateusfccp)](https://img.shields.io/badge/-Sponsor%20(mateusfccp)-555555?style=flat-square)](https://github.com/sponsors/mateusfccp)[![GitHub Sponsors](https://img.shields.io/badge/--ea4aaa?logo=github&style=flat-square)](https://github.com/sponsors/mateusfccp)
 
 A [Dart](https://dart.dev/)
 [timer](https://api.dart.dev/stable/dart-async/Timer/Timer.html) that can be
@@ -77,7 +77,8 @@ void main() async {
 ## Example pausable countdown implementation
 
 ```dart
-/// Example on how to implement countdown making a PausableTimer periodic.
+// Example on how to implement countdown using PausableTimer.periodic
+import 'dart:async';
 
 import 'package:pausable_timer/pausable_timer.dart';
 
@@ -87,21 +88,15 @@ void main() async {
   var countDown = 5;
 
   print('Create a periodic timer that fires every 1 second and starts it');
-  timer = PausableTimer(
+  timer = PausableTimer.periodic(
     Duration(seconds: 1),
-    () {
+        () {
       countDown--;
-      // If we reached 0, we don't reset and restart the time, so it won't fire
-      // again, but it can be reused afterwards if needed. If we cancel the
-      // timer, then it can be reused after the countdown is over.
-      if (countDown > 0) {
-        // we know the callback won't be called before the constructor ends, so
-        // it is safe to use !
-        timer
-          ..reset()
-          ..start();
+
+      if (countDown == 0) {
+        timer.pause();
       }
-      // This is really what your callback do.
+
       print('\t$countDown');
     },
   )..start();
