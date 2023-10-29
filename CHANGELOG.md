@@ -1,6 +1,10 @@
+## 3.1.0+2
+
+- Update README.md countdown example to use `PausableTimer.periodic`
+
 ## 3.1.0+1
 
-- Automate pub.dev publishing with `GitHub Actions`
+- Automate pub.dev publishing with GitHub Actions
 
 ## 3.1.0
 
