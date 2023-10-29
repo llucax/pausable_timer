@@ -1,3 +1,8 @@
+## 3.1.0
+
+- Provide `.periodic` constructor (#45)
+  - A periodic timer should behave similar to [Timer.periodic](https://api.dart.dev/stable/dart-async/Timer/Timer.periodic.html)
+
 ## 3.0.0
 
 - **BREAKING:** `PausableTimer` is now `final`

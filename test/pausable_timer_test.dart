@@ -5,208 +5,541 @@ import 'package:pausable_timer/pausable_timer.dart';
 
 void main() {
   const oneSecond = Duration(seconds: 1);
+  const halfSecond = Duration(milliseconds: 500);
 
   var numCalls = 0;
   void callback() => numCalls++;
   setUp(() => numCalls = 0);
 
-  void expectState(
-    PausableTimer timer,
-    Duration duration,
-    State state, {
-    Duration elapsed = Duration.zero,
-    int withCalls = 0,
-  }) {
-    expect(timer.isActive, state == State.active, reason: 'Property: isActive');
-    expect(timer.isPaused, state == State.paused, reason: 'Property: isPaused');
-    expect(timer.isExpired, state == State.expired || state == State.expiredCancelled, reason: 'Property: isExpired');
-    expect(timer.isCancelled, state == State.cancelled || state == State.expiredCancelled, reason: 'Property: isCancelled');
-    expect(timer.duration, duration, reason: 'Property: duration');
-    expect(timer.elapsed, elapsed, reason: 'Property: elapsed');
-    expect(numCalls, withCalls, reason: 'Property: numCalls');
-    expect(timer.tick, numCalls, reason: 'Property: ticks');
-  }
-
-  test("A pausable timer duration can't be less than zero", () {
-    expect(
-      () => PausableTimer(Duration(seconds: -1), () {}),
-      throwsA(isA<AssertionError>()),
-    );
-  });
-
-  test("A pausable timer should initially be paused with the duration set to the given duration", () {
-    for (final duration in [Duration.zero, oneSecond]) {
-      final timer = PausableTimer(duration, callback);
-      expectState(timer, duration, State.paused);
-    }
-  });
-
-  test('start()', () {
-    fakeAsync((fakeTime) {
-      final timer = PausableTimer(oneSecond, callback);
-
-      // Wait for a couple of seconds and it should be still paused
-      fakeTime.elapse(oneSecond * 2);
-      expectState(timer, oneSecond, State.paused);
-
-      timer.start();
-      expectState(timer, oneSecond, State.active);
-
-      // Wait for half the duration, it should be still running
-      fakeTime.elapse(oneSecond ~/ 2);
-      expectState(timer, oneSecond, State.active, elapsed: oneSecond ~/ 2);
-
-      // start again should do nothing
-      timer.start();
-      expectState(timer, oneSecond, State.active, elapsed: oneSecond ~/ 2);
-
-      // Wait again for half the duration and it should have expired
-      fakeTime.elapse(oneSecond ~/ 2);
-      expectState(timer, oneSecond, State.expired, elapsed: oneSecond, withCalls: 1);
-
-      // Wait for a couple more seconds, nothing should happen
-      fakeTime.elapse(oneSecond * 2);
-      expectState(timer, oneSecond, State.expired, elapsed: oneSecond, withCalls: 1);
-
-      // start when it's already expired should do nothing
-      timer.start();
-      expectState(timer, oneSecond, State.expired, elapsed: oneSecond, withCalls: 1);
+  group('A timer', () {
+    test("duration can't be less than zero", () {
+      expect(
+        () => PausableTimer(Duration(seconds: -1), callback),
+        throwsA(isA<AssertionError>()),
+      );
     });
-  });
 
-  test('pause()', () {
-    fakeAsync((fakeTime) {
-      final timer = PausableTimer(oneSecond, callback);
-
-      timer.start();
-      expectState(timer, oneSecond, State.active);
-
-      // Wait for half the duration, it should be still running
-      fakeTime.elapse(oneSecond ~/ 2);
-      expectState(timer, oneSecond, State.active, elapsed: oneSecond ~/ 2);
-      var elapsed = timer.elapsed;
-
-      // Pause it
-      timer.pause();
-      expectState(timer, oneSecond, State.paused, elapsed: elapsed);
-      elapsed = timer.elapsed;
-
-      // Wait for a couple more seconds, nothing should happen
-      fakeTime.elapse(oneSecond * 2);
-      expectState(timer, oneSecond, State.paused, elapsed: elapsed);
-
-      // pause should do nothing either, even if more time passes
-      timer.pause();
-      fakeTime.elapse(oneSecond * 2);
-      expectState(timer, oneSecond, State.paused, elapsed: elapsed);
-
-      // Resume the timer, it should be State.active again
-      timer.start();
-      expectState(timer, oneSecond, State.active, elapsed: elapsed);
-
-      // Wait for the remaining time, then it should be expired
-      fakeTime.elapse(oneSecond - timer.elapsed);
-      expectState(timer, oneSecond, State.expired, elapsed: oneSecond, withCalls: 1);
-
-      // Wait for a couple more seconds, nothing should happen
-      fakeTime.elapse(oneSecond * 2);
-      expectState(timer, oneSecond, State.expired, elapsed: oneSecond, withCalls: 1);
-
-      // pause when it's already expired should do nothing
-      timer.pause();
-      expectState(timer, oneSecond, State.expired, elapsed: oneSecond, withCalls: 1);
+    test("duration should be set to the given duration", () {
+      for (final duration in [Duration.zero, oneSecond]) {
+        final timer = PausableTimer(duration, callback);
+        expect(timer.duration, duration);
+      }
     });
-  });
 
-  test('reset()', () {
-    fakeAsync((fakeTime) {
-      final timer = PausableTimer(oneSecond, callback);
-
-      // resetting the timer upon start should be a NOP
-      timer.reset();
-      expectState(timer, oneSecond, State.paused);
-
-      // start and reset after half the time passed
-      timer.start();
-      fakeTime.elapse(oneSecond ~/ 2);
-      expectState(timer, oneSecond, State.active, elapsed: oneSecond ~/ 2);
-      // reset should bring the elapsed time to zero-ish again but it should
-      // be still State.active
-      timer.reset();
-      expectState(timer, oneSecond, State.active);
-
-      // let some time pass again, pause and reset, it should be reset to
-      // nothing elapsed and still be paused
-      fakeTime.elapse(oneSecond ~/ 3);
-      timer.pause();
-      fakeTime.elapse(oneSecond ~/ 3);
-      expectState(timer, oneSecond, State.paused, elapsed: oneSecond ~/ 3);
-      timer.reset();
-      expectState(timer, oneSecond, State.paused);
-    });
-  });
-
-  group('cancel()', () {
-    test('just after creation', () {
-      fakeAsync((fakeTime) {
-        // cancel just after creation
+    test("shouldn't start automatically", () {
+      fakeAsync((async) {
         final timer = PausableTimer(oneSecond, callback);
-        timer.cancel();
-        expectState(timer, oneSecond, State.cancelled);
-        fakeTime.elapse(oneSecond * 2);
-        expectState(timer, oneSecond, State.cancelled);
+        expect(timer.isActive, isFalse);
+
+        async.elapse(oneSecond * 2);
+        expect(timer.isActive, isFalse);
       });
     });
 
-    test('after start()', () {
-      fakeAsync((fakeTime) {
-        // cancel in the middle of the timer time
+    test("should call it's callback after the given duration", () {
+      fakeAsync((async) {
         final timer = PausableTimer(oneSecond, callback);
+
         timer.start();
-        fakeTime.elapse(oneSecond ~/ 2);
-        timer.cancel();
-        expectState(timer, oneSecond, State.cancelled, elapsed: oneSecond ~/ 2);
-        // calling cancel again should do nothing
-        timer.cancel();
-        expectState(timer, oneSecond, State.cancelled, elapsed: oneSecond ~/ 2);
+        async.elapse(oneSecond - Duration(microseconds: 1));
+        expect(numCalls, 0);
+        expect(timer.isExpired, isFalse);
+
+        async.elapse(Duration(microseconds: 1));
+        expect(numCalls, 1);
+        expect(timer.isExpired, isTrue);
       });
     });
 
-    test('after pause()', () {
-      fakeAsync((fakeTime) {
-        // cancel after expiration should do nothing
+    test("should do nothing after it's expired", () {
+      fakeAsync((async) {
         final timer = PausableTimer(oneSecond, callback);
+
         timer.start();
-        fakeTime.elapse(oneSecond);
-        expectState(timer, oneSecond, State.expired, elapsed: oneSecond, withCalls: 1);
-        timer.cancel();
-        expectState(timer, oneSecond, State.expiredCancelled, elapsed: oneSecond, withCalls: 1);
+        async.elapse(oneSecond);
+        expect(numCalls, 1);
+        expect(timer.isExpired, isTrue);
+
+        async.elapse(oneSecond * 2);
+        expect(numCalls, 1);
+        expect(timer.isExpired, isTrue);
+      });
+    });
+  });
+
+  group('A periodic timer', () {
+    test("duration can't be less than zero", () {
+      expect(
+            () => PausableTimer.periodic(Duration(seconds: -1), callback),
+        throwsA(isA<AssertionError>()),
+      );
+    });
+
+    test("duration should be set to the given duration", () {
+      for (final duration in [Duration.zero, oneSecond]) {
+        final timer = PausableTimer.periodic(duration, callback);
+        expect(timer.duration, duration);
+      }
+    });
+
+    test("shouldn't start automatically", () {
+      fakeAsync((async) {
+        final timer = PausableTimer.periodic(oneSecond, callback);
+        expect(timer.isActive, isFalse);
+
+        async.elapse(oneSecond * 2);
+        expect(timer.isActive, isFalse);
       });
     });
 
-    test('first, then start(), pause() and reset() do nothing', () {
-      fakeAsync((fakeTime) {
-        final timer = PausableTimer(oneSecond, callback);
-        timer.start();
-        fakeTime.elapse(oneSecond ~/ 2);
-        timer.cancel();
+    test("should not expire after executing it's callback", () {
+      fakeAsync((async) {
+        final timer = PausableTimer.periodic(oneSecond, callback);
 
-        // start(), pause() and reset() after cancel() do nothing
         timer.start();
-        expectState(timer, oneSecond, State.cancelled, elapsed: oneSecond ~/ 2);
+        async.elapse(oneSecond);
+        expect(timer.isActive, true);
+      });
+    });
+
+    test("should call it's callback after the given duration", () {
+      fakeAsync((async) {
+        final timer = PausableTimer(oneSecond, callback);
+
+        timer.start();
+        async.elapse(oneSecond - Duration(microseconds: 1));
+        expect(numCalls, 0);
+        expect(timer.isExpired, isFalse);
+
+        async.elapse(Duration(microseconds: 1));
+        expect(numCalls, 1);
+        expect(timer.isExpired, isTrue);
+      });
+    });
+
+    test("should call it's callback as many times as it's duration requires", () {
+      fakeAsync((async) {
+        final timer = PausableTimer.periodic(oneSecond, callback);
+
+        timer.start();
+        async.elapse(oneSecond * 100);
+        expect(numCalls, 100);
+      });
+    });
+  });
+
+  group('Starting', () {
+    test("an active timer should do nothing", () {
+      fakeAsync((async) {
+        final timer = PausableTimer(oneSecond, callback);
+
+        timer.start();
+        final initialState = timer.state;
+
+        timer.start();
+        final finalState = timer.state;
+
+        expect(initialState, finalState);
+      });
+    });
+
+    test("a paused timer should resume it's timer", () {
+      fakeAsync((async) {
+        final timer = PausableTimer(oneSecond, callback);
+
+        timer.start();
+        async.elapse(halfSecond);
+
         timer.pause();
-        expectState(timer, oneSecond, State.cancelled, elapsed: oneSecond ~/ 2);
+        expect(timer.elapsed, halfSecond);
+
+        timer.start();
+        expect(timer.elapsed, halfSecond);
+
+        async.elapse(halfSecond);
+        expect(timer.isExpired, isTrue);
+        expect(numCalls, 1);
+      });
+    });
+
+    test("an expired timer should do nothing", () {
+      fakeAsync((async) {
+        final timer = PausableTimer(oneSecond, callback);
+
+        timer.start();
+        async.elapse(oneSecond);
+        expect(numCalls, 1);
+        expect(timer.isExpired, isTrue);
+
+        timer.start();
+        expect(numCalls, 1);
+        expect(timer.isExpired, isTrue);
+
+        async.elapse(oneSecond);
+
+        expect(numCalls, 1);
+        expect(timer.isExpired, isTrue);
+      });
+    });
+
+    test("a cancelled timer should do nothing", () {
+      fakeAsync((async) {
+        final timer = PausableTimer(oneSecond, callback);
+
+        timer.start();
+        async.elapse(halfSecond);
+        timer.cancel();
+        async.elapse(oneSecond);
+        expect(timer.isCancelled, isTrue);
+        expect(numCalls, 0);
+
+        timer.start();
+        expect(timer.isCancelled, isTrue);
+        async.elapse(oneSecond);
+        expect(timer.isCancelled, isTrue);
+        expect(numCalls, 0);
+      });
+    });
+
+    test("an active periodic timer should do nothing", () {
+      fakeAsync((async) {
+        final timer = PausableTimer.periodic(oneSecond, callback);
+
+        timer.start();
+        final initialState = timer.state;
+
+        timer.start();
+        final finalState = timer.state;
+
+        expect(initialState, finalState);
+      });
+    });
+
+    test("a paused periodic timer should resume it's timer", () {
+      fakeAsync((async) {
+        final timer = PausableTimer.periodic(oneSecond, callback);
+
+        timer.start();
+        async.elapse(halfSecond);
+
+        timer.pause();
+        expect(timer.elapsed, halfSecond);
+
+        timer.start();
+        expect(timer.elapsed, halfSecond);
+
+        async.elapse(halfSecond);
+        expect(numCalls, 1);
+      });
+    });
+
+    test("a cancelled periodic timer should do nothing", () {
+      fakeAsync((async) {
+        final timer = PausableTimer.periodic(oneSecond, callback);
+
+        timer.start();
+        async.elapse(halfSecond);
+        timer.cancel();
+        async.elapse(oneSecond);
+        expect(timer.isCancelled, isTrue);
+        expect(numCalls, 0);
+
+        timer.start();
+        expect(timer.isCancelled, isTrue);
+        async.elapse(oneSecond);
+        expect(timer.isCancelled, isTrue);
+        expect(numCalls, 0);
+      });
+    });
+  });
+
+  group('Pausing', () {
+    test('an active timer should prevent the callback from executing', () {
+      fakeAsync((async) {
+        final timer = PausableTimer(oneSecond, callback);
+
+        timer.start();
+        expect(timer.isActive, isTrue);
+
+        async.elapse(halfSecond);
+        timer.pause();
+        expect(timer.isPaused, isTrue);
+
+        async.elapse(oneSecond);
+        expect(timer.isPaused, isTrue);
+        expect(numCalls, 0);
+      });
+    });
+
+    test('a paused timer should do nothing', () {
+      fakeAsync((async) {
+        final timer = PausableTimer(oneSecond, callback);
+
+        final initialState = timer.state;
+
+        async.elapse(oneSecond);
+        timer.pause();
+        final finalState = timer.state;
+
+        expect(initialState, finalState);
+      });
+    });
+
+    test('an expired timer should do nothing', () {
+      fakeAsync((async) {
+        final timer = PausableTimer(oneSecond, callback);
+
+        timer.start();
+        async.elapse(oneSecond);
+        final initialState = timer.state;
+
+        timer.pause();
+        final finalState = timer.state;
+
+        expect(initialState, finalState);
+      });
+    });
+
+    test('a cancelled timer should do nothing', () {
+      fakeAsync((async) {
+        final timer = PausableTimer(oneSecond, callback);
+
+        timer.cancel();
+        final initialState = timer.state;
+
+        async.elapse(oneSecond);
+
+        timer.pause();
+        final finalState = timer.state;
+
+        expect(initialState, finalState);
+      });
+    });
+
+    test('an active periodic timer should prevent the callback from executing', () {
+      fakeAsync((async) {
+        final timer = PausableTimer.periodic(oneSecond, callback);
+
+        timer.start();
+        expect(timer.isActive, isTrue);
+
+        async.elapse(halfSecond);
+        timer.pause();
+        expect(timer.isPaused, isTrue);
+
+        async.elapse(oneSecond);
+        expect(timer.isPaused, isTrue);
+        expect(numCalls, 0);
+      });
+    });
+
+    test('a paused periodic timer should do nothing', () {
+      fakeAsync((async) {
+        final timer = PausableTimer.periodic(oneSecond, callback);
+
+        final initialState = timer.state;
+
+        async.elapse(oneSecond);
+        timer.pause();
+        final finalState = timer.state;
+
+        expect(initialState, finalState);
+      });
+    });
+
+    test('a cancelled periodic timer should do nothing', () {
+      fakeAsync((async) {
+        final timer = PausableTimer.periodic(oneSecond, callback);
+
+        timer.cancel();
+        final initialState = timer.state;
+
+        async.elapse(oneSecond);
+
+        timer.pause();
+        final finalState = timer.state;
+
+        expect(initialState, finalState);
+      });
+    });
+  });
+
+  group('Resetting', () {
+    test("an active timer should revert it's timer to zero", () {
+      fakeAsync((async) {
+        final timer = PausableTimer(oneSecond, callback);
+
+        timer.start();
+        async.elapse(halfSecond);
+        expect(timer.isActive, isTrue);
+        expect(timer.elapsed, halfSecond);
+
         timer.reset();
-        expectState(timer, oneSecond, State.cancelled, elapsed: oneSecond ~/ 2);
+        expect(timer.isActive, isTrue);
+        expect(timer.elapsed, Duration.zero);
+      });
+    });
+
+    test("a paused timer should revert it's timer to zero", () {
+      fakeAsync((async) {
+        final timer = PausableTimer(oneSecond, callback);
+
+        timer.start();
+        async.elapse(halfSecond);
+        timer.pause();
+        expect(timer.isPaused, isTrue);
+        expect(timer.elapsed, halfSecond);
+
+        timer.reset();
+        expect(timer.isPaused, isTrue);
+        expect(timer.elapsed, Duration.zero);
+      });
+    });
+
+    test("an expired timer should revert it's timer to zero and it's status to paused", () {
+      fakeAsync((async) {
+        final timer = PausableTimer(oneSecond, callback);
+
+        timer.start();
+        async.elapse(oneSecond);
+        expect(timer.isExpired, isTrue);
+        expect(numCalls, 1);
+
+        timer.reset();
+        expect(timer.isPaused, isTrue);
+        expect(timer.elapsed, Duration.zero);
+      });
+    });
+
+    test('a cancelled timer should do nothing', () {
+      fakeAsync((async) {
+        final timer = PausableTimer(oneSecond, callback);
+
+        timer.cancel();
+        final initialState = timer.state;
+
+        timer.reset();
+        final finalState = timer.state;
+
+        expect(initialState, finalState);
+      });
+    });
+
+    test("an active periodic timer should revert it's timer to zero", () {
+      fakeAsync((async) {
+        final timer = PausableTimer.periodic(oneSecond, callback);
+
+        timer.start();
+        async.elapse(halfSecond);
+        expect(timer.isActive, isTrue);
+        expect(timer.elapsed, halfSecond);
+
+        timer.reset();
+        expect(timer.isActive, isTrue);
+        expect(timer.elapsed, Duration.zero);
+      });
+    });
+
+    test("a paused periodic timer should revert it's timer to zero", () {
+      fakeAsync((async) {
+        final timer = PausableTimer.periodic(oneSecond, callback);
+
+        timer.start();
+        async.elapse(halfSecond);
+        timer.pause();
+        expect(timer.isPaused, isTrue);
+        expect(timer.elapsed, halfSecond);
+
+        timer.reset();
+        expect(timer.isPaused, isTrue);
+        expect(timer.elapsed, Duration.zero);
+      });
+    });
+
+    test('a cancelled periodic timer should do nothing', () {
+      fakeAsync((async) {
+        final timer = PausableTimer.periodic(oneSecond, callback);
+
+        timer.cancel();
+        final initialState = timer.state;
+
+        timer.reset();
+        final finalState = timer.state;
+
+        expect(initialState, finalState);
+      });
+    });
+  });
+
+  group('Cancelling', () {
+    test('an active timer should prevent the callback from executing', () {
+      fakeAsync((async) {
+        final timer = PausableTimer(oneSecond, callback);
+
+        timer.start();
+        expect(timer.isActive, isTrue);
+
+        async.elapse(halfSecond);
+        timer.cancel();
+        expect(timer.isCancelled, isTrue);
+
+        async.elapse(oneSecond);
+        expect(timer.isCancelled, isTrue);
+        expect(numCalls, 0);
+      });
+    });
+
+    test('a cancelled timer should do nothing', () {
+      fakeAsync((async) {
+        final timer = PausableTimer(oneSecond, callback);
+
+        timer.cancel();
+        final initialState = timer.state;
+
+        async.elapse(oneSecond);
+
+        timer.cancel();
+        final finalState = timer.state;
+
+        expect(initialState, finalState);
+      });
+    });
+
+    test('an active periodic timer should prevent the callback from executing', () {
+      fakeAsync((async) {
+        final timer = PausableTimer.periodic(oneSecond, callback);
+
+        timer.start();
+        expect(timer.isActive, isTrue);
+
+        async.elapse(halfSecond);
+        timer.cancel();
+        expect(timer.isCancelled, isTrue);
+
+        async.elapse(oneSecond);
+        expect(timer.isCancelled, isTrue);
+        expect(numCalls, 0);
+      });
+    });
+
+    test('a cancelled periodic timer should do nothing', () {
+      fakeAsync((async) {
+        final timer = PausableTimer.periodic(oneSecond, callback);
+
+        timer.cancel();
+        final initialState = timer.state;
+
+        async.elapse(oneSecond);
+
+        timer.cancel();
+        final finalState = timer.state;
+
+        expect(initialState, finalState);
       });
     });
   });
 }
 
-enum State {
-  active,
-  paused,
-  expired,
-  cancelled,
-  expiredCancelled;
+extension on PausableTimer {
+  (bool, bool, bool, bool, Duration, Duration, int) get state => (isActive, isPaused, isExpired, isCancelled, duration, elapsed, tick);
 }

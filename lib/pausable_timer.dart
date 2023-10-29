@@ -39,6 +39,8 @@ final class PausableTimer implements Timer {
   /// When the timer expires, this stopwatch is set to null.
   Stopwatch? _stopwatch = clock.stopwatch();
 
+  final bool _periodic;
+
   /// The currently active [Timer].
   ///
   /// This is null whenever this timer is not currently active.
@@ -61,45 +63,91 @@ final class PausableTimer implements Timer {
   /// should make sure the timer wasn't cancelled before calling this function.
   void _startTimer() {
     assert(_stopwatch != null);
-    _timer = _zone.createTimer(
-      _originalDuration - _stopwatch!.elapsed,
-      () {
-        _tick++;
-        _timer = null;
-        _stopwatch = null;
-        _zone.run(_callback!);
-      },
-    );
+
+    if (_periodic && _stopwatch!.elapsed == Duration.zero) {
+      _timer = _zone.createPeriodicTimer(
+        duration,
+        (Timer timer) {
+          _tick++;
+          _zone.run(_callback!);
+          _stopwatch = clock.stopwatch();
+          _stopwatch!.start();
+        },
+      );
+    } else {
+      _timer = _zone.createTimer(
+        duration - _stopwatch!.elapsed,
+        () {
+          _tick++;
+          if (_periodic) {
+            reset();
+          } else {
+            _timer = null;
+            _stopwatch = null;
+          }
+          _zone.run(_callback!);
+        },
+      );
+    }
+
     _stopwatch!.start();
   }
 
-  /// Creates a new timer.
+  /// Creates a new pausable timer.
   ///
   /// The [callback] is invoked after the given [duration], but can be [pause]d
   /// in between or [reset]. The [elapsed] time is only accounted for while the
-  /// timer [isActive].
+  /// timer is active.
   ///
-  /// The timer [isPaused] when created, and must be [start]ed manually.
+  /// The timer is paused when created, and must be [start]ed manually.
   ///
   /// The [duration] must be equals or bigger than [Duration.zero].
   /// If it is [Duration.zero], the [callback] will still not be called until
   /// the timer is [start]ed.
-  PausableTimer(Duration duration, void Function() callback)
+  PausableTimer(this.duration, void Function() callback)
       : assert(duration >= Duration.zero),
-        _originalDuration = duration,
-        _zone = Zone.current {
+        _zone = Zone.current,
+        _periodic = false {
+    _callback = _zone.bindCallback(callback);
+  }
+
+  /// Creates a new repeating pausable timer.
+  ///
+  /// The [callback] is invoked repeatedly with [duration] intervals until
+  /// canceled with the [cancel] function, but can be [pause]d
+  /// in between or [reset]. The [elapsed] time is only accounted for while the
+  /// timer is active.
+  ///
+  /// The timer is paused when created, and must be [start]ed manually.
+  ///
+  /// The exact timing depends on the underlying timer implementation.
+  /// No more than `n` callbacks will be made in `duration * n` time,
+  /// but the time between two consecutive callbacks
+  /// can be shorter and longer than `duration`.
+  ///
+  /// In particular, an implementation may schedule the next callback, e.g.,
+  /// a `duration` after either when the previous callback ended,
+  /// when the previous callback started, or when the previous callback was
+  /// scheduled for - even if the actual callback was delayed.
+  ///
+  /// The [duration] must be equals or bigger than [Duration.zero].
+  /// If it is [Duration.zero], the [callback] will still not be called until
+  /// the timer is [start]ed.
+  PausableTimer.periodic(this.duration, void Function() callback)
+      : assert(duration >= Duration.zero),
+        _zone = Zone.current,
+        _periodic = true {
     _callback = _zone.bindCallback(callback);
   }
 
   /// The original duration this [Timer] was created with.
-  Duration get duration => _originalDuration;
-  final Duration _originalDuration;
+  final Duration duration;
 
   /// The time this [Timer] have been active.
   ///
   /// If the timer is paused, the elapsed time is also not computed anymore, so
   /// [elapsed] is always less than or equals to the [duration].
-  Duration get elapsed => _stopwatch?.elapsed ?? _originalDuration;
+  Duration get elapsed => _stopwatch?.elapsed ?? duration;
 
   /// True if this [Timer] is armed but not currently active.
   ///
