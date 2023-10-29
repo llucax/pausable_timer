@@ -1,6 +1,8 @@
 ## 3.1.0+2
 
 - Update README.md countdown example to use `PausableTimer.periodic`
+- Rename `.yml` files to `.yaml`, which is the [recommended](https://yaml.org/faq.html) extension
+- Use single quote in `wip.yaml` so that backticks won't expand to commands
 
 ## 3.1.0+1
 
