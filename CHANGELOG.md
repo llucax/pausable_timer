@@ -1,3 +1,7 @@
+## 3.1.0+3
+
+- Fix README.md reference to `yaml` file
+
 ## 3.1.0+2
 
 - Update README.md countdown example to use `PausableTimer.periodic`
