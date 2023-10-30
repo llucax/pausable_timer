@@ -6,7 +6,7 @@ funding:
   - https://github.com/sponsors/mateusfccp
   - https://github.com/llucax/llucax/blob/main/sponsoring-platforms.md
 
-version: 3.1.0+2
+version: 3.1.0+3
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

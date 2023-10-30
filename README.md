@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/llucax/pausable_timer/workflows/CI/badge.svg)](https://github.com/llucax/pausable_timer/actions?query=branch%3Amain+workflow%3ACI+)
 [![Pub Score](https://github.com/llucax/pausable_timer/workflows/Pub%20Score/badge.svg)](https://github.com/llucax/pausable_timer/actions?query=branch%3Amain+workflow%3A%22Pub+Score%22+)
-[![Latest Dart version](https://github.com/llucax/pausable_timer/actions/workflows/check-dart.yml/badge.svg)](https://github.com/llucax/pausable_timer/actions/workflows/check-dart.yml)
+[![Latest Dart version](https://github.com/llucax/pausable_timer/actions/workflows/check-dart.yaml/badge.svg)](https://github.com/llucax/pausable_timer/actions/workflows/check-dart.yaml)
 [![Coverage](https://codecov.io/gh/llucax/pausable_timer/branch/main/graph/badge.svg)](https://codecov.io/gh/llucax/pausable_timer)
 [![pub package](https://img.shields.io/pub/v/pausable_timer.svg)](https://pub.dev/packages/pausable_timer)
 [![pub points](https://img.shields.io/pub/points/pausable_timer)](https://pub.dev/packages/pausable_timer/score)
